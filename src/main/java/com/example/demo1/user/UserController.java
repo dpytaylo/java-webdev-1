@@ -3,7 +3,7 @@ package com.example.demo1.user;
 import com.example.demo1.util.*;
 import com.example.demo1.util.annotation.AuthRequired;
 import com.example.demo1.util.annotation.GetMapping;
-import com.example.demo1.util.annotation.MyController;
+import com.example.demo1.util.annotation.ControllerMapping;
 import com.example.demo1.util.response.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@MyController("/users")
+@ControllerMapping("/users")
 public class UserController extends Controller {
     private static final Logger logger = LogManager.getLogger(UserController.class);
 

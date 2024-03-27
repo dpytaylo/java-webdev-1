@@ -5,7 +5,7 @@ import com.example.demo1.session.SessionRepository;
 import com.example.demo1.session.SessionService;
 import com.example.demo1.util.annotation.AuthRequired;
 import com.example.demo1.util.annotation.GetMapping;
-import com.example.demo1.util.annotation.MyController;
+import com.example.demo1.util.annotation.ControllerMapping;
 import com.example.demo1.util.annotation.PostMapping;
 import com.example.demo1.util.exception.InvalidRequestUrlException;
 import com.example.demo1.util.exception.MainServletException;
@@ -50,7 +50,7 @@ public class MainServlet extends HttpServlet {
         final var allClasses = reflections.getSubTypesOf(Controller.class);
 
         for (final var cls : allClasses) {
-            final var myController = cls.getAnnotation(MyController.class);
+            final var myController = cls.getAnnotation(ControllerMapping.class);
 
             if (myController == null) {
                 logger.fatal("'" + cls.getName() + "' should have the '@MyController' annotation");

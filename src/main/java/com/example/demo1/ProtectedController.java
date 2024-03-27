@@ -4,14 +4,12 @@ import com.example.demo1.user.UserService;
 import com.example.demo1.util.*;
 import com.example.demo1.util.annotation.AuthRequired;
 import com.example.demo1.util.annotation.GetMapping;
-import com.example.demo1.util.annotation.MyController;
+import com.example.demo1.util.annotation.ControllerMapping;
 import com.example.demo1.util.extractor.Html;
 import com.example.demo1.util.response.IntoResponse;
 import com.example.demo1.util.response.Response;
 
-import java.io.IOException;
-
-@MyController("/protected")
+@ControllerMapping("/protected")
 public class ProtectedController extends Controller {
     private UserService userService;
 

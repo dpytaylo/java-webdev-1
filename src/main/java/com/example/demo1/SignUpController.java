@@ -9,14 +9,14 @@ import com.example.demo1.user.UserService;
 import com.example.demo1.util.Controller;
 import com.example.demo1.util.RequestContext;
 import com.example.demo1.util.annotation.GetMapping;
-import com.example.demo1.util.annotation.MyController;
+import com.example.demo1.util.annotation.ControllerMapping;
 import com.example.demo1.util.annotation.PostMapping;
 import com.example.demo1.util.response.IntoResponse;
 import com.example.demo1.util.response.TemplateResponse;
 
 import java.sql.SQLException;
 
-@MyController("/sign_up")
+@ControllerMapping("/sign_up")
 public class SignUpController extends Controller {
     private static final String VAR_ERROR = "error";
     private final UserService userService;

@@ -7,16 +7,15 @@ import com.example.demo1.user.UserRepository;
 import com.example.demo1.user.UserService;
 import com.example.demo1.util.*;
 import com.example.demo1.util.annotation.GetMapping;
-import com.example.demo1.util.annotation.MyController;
+import com.example.demo1.util.annotation.ControllerMapping;
 import com.example.demo1.util.annotation.PostMapping;
 import com.example.demo1.util.response.*;
-import jakarta.servlet.http.Cookie;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.SQLException;
 
-@MyController("/sign_in")
+@ControllerMapping("/sign_in")
 public class SignInController extends Controller {
     private static final String VAR_ERROR = "error";
     private static final Logger logger = LogManager.getLogger(SignInController.class);
