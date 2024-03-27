@@ -64,7 +64,7 @@ public class MainServlet extends HttpServlet {
         }
 
         try {
-            DatabaseConfig databaseConfig = new DatabaseConfig();
+            new DatabaseConfig();
         } catch (SQLException e) {
             logger.fatal("Failed to initialize database", e);
             throw new RuntimeException(e);
@@ -204,17 +204,6 @@ public class MainServlet extends HttpServlet {
         final var requestUrl = ctx.getUrl();
 
         if (requestUrl.matches(url) && authRequired != null) {
-//            var authorization = ctx.getRequest().getHeader(RequestHeader.AUTHORIZATION);
-//
-//            logger.info("token = " + authorization);
-//            long userId;
-//            try {
-//                userId = JwtTokens.parseBearerToken(authorization);
-//            } catch (Exception e) {
-//                logger.error("Invalid or expired token: " + authorization);
-//                return new UnauthorizedResponse();
-//            }
-
             long userId;
             try {
                 userId = sessionService.getSessionUserId(ctx);
