@@ -23,7 +23,7 @@ public class SignInController extends Controller {
     private final UserService userService;
     private final SessionService sessionService;
 
-    public SignInController() throws Exception {
+    public SignInController() {
         userService = new UserService(new UserRepository());
         sessionService = new SessionService(new SessionRepository());
     }

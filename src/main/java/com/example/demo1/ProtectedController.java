@@ -17,7 +17,7 @@ public class ProtectedController extends Controller {
 
     @GetMapping("/")
     @AuthRequired
-    public IntoResponse get(RequestContext ctx, long userId) throws IOException {
+    public IntoResponse get(RequestContext ctx, long userId) {
         return new Response<>(StatusCode.OK, new Html("user id = " + userId));
     }
 }
