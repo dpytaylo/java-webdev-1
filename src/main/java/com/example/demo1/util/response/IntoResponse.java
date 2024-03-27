@@ -10,7 +10,5 @@ public interface IntoResponse {
     HashMap<String, String> getHeaders();
     String getContentType();
     byte[] getContent();
-    default Optional<String> requestDispatcherResponse() {
-        return Optional.empty();
-    }
+    default Optional<String> getTemplate() { return Optional.empty(); }
 }

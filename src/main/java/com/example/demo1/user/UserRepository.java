@@ -1,50 +1,24 @@
 package com.example.demo1.user;
 
+import com.example.demo1.util.DatabaseConfig;
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public class UserRepository {
-    private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/webdev";
-    public static final String POSTGRES_USERNAME = "postgres";
-    public static final String POSTGRES_PASSWORD = "password";
-    private static final String CREATE_USERS_TABLE_IF_NOT_EXISTS
-        = "CREATE TABLE IF NOT EXISTS users (" +
-            "id BIGSERIAL," +
-            "email TEXT UNIQUE NOT NULL," +
-            "password TEXT NOT NULL," +
-            "password_salt TEXT NOT NULL," +
-            "name VARCHAR(30) UNIQUE NOT NULL," +
-            "age INT NOT NULL" +
-        ")";
-    private static final String GET_ALL_QUERY = "SELECT id, email, password, password_salt, name, age FROM users";
-    private static final String FIND_BY_EMAIL_QUERY = "SELECT id, email, password, password_salt, name, age FROM users WHERE email = ?";
-    private static final String INSERT_QUERY = "INSERT INTO users (email, password, password_salt, name, age) VALUES (?, ?, ?, ?, ?)";
-
-    public UserRepository() throws Exception {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (Connection connection = DriverManager.getConnection(
-            JDBC_URL,
-            POSTGRES_USERNAME,
-            POSTGRES_PASSWORD
-        )) {
-            try (Statement statement = connection.createStatement()) {
-                statement.execute(CREATE_USERS_TABLE_IF_NOT_EXISTS);
-            }
-        }
-    }
+    private static final String GET_ALL_QUERY = "SELECT id, email, password, name, age FROM users";
+    private static final String FIND_BY_USER_ID_QUERY = "SELECT id, email, password, name, age FROM users WHERE id = ?";
+    private static final String FIND_BY_EMAIL_QUERY = "SELECT id, email, password, name, age FROM users WHERE email = ?";
+    private static final String FIND_BY_NAME_QUERY = "SELECT id, email, password, name, age FROM users WHERE name = ?";
+    private static final String INSERT_QUERY = "INSERT INTO users (email, password, name, age) VALUES (?, ?, ?, ?)";
 
     public ArrayList<User> getAll() throws SQLException {
         ArrayList<User> users = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(
-            JDBC_URL,
-            POSTGRES_USERNAME,
-            POSTGRES_PASSWORD
+            DatabaseConfig.JDBC_URL,
+            DatabaseConfig.POSTGRES_USERNAME,
+            DatabaseConfig.POSTGRES_PASSWORD
         )) {
             try (Statement statement = connection.createStatement()) {
                 ResultSet resultSet = statement.executeQuery(GET_ALL_QUERY);
@@ -57,12 +31,31 @@ public class UserRepository {
 
         return users;
     }
-    
+
+    public User findByUserId(long userId) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(
+            DatabaseConfig.JDBC_URL,
+            DatabaseConfig.POSTGRES_USERNAME,
+            DatabaseConfig.POSTGRES_PASSWORD
+        )) {
+            try (PreparedStatement statement = connection.prepareStatement(FIND_BY_USER_ID_QUERY)) {
+                statement.setLong(1, userId);
+
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    return getUserFromResultSet(resultSet);
+                }
+            }
+        }
+
+        return null;
+    }
+
     public User findByEmail(String email) throws SQLException {
         try (Connection connection = DriverManager.getConnection(
-            JDBC_URL,
-            POSTGRES_USERNAME,
-            POSTGRES_PASSWORD
+            DatabaseConfig.JDBC_URL,
+            DatabaseConfig.POSTGRES_USERNAME,
+            DatabaseConfig.POSTGRES_PASSWORD
         )) {
             try (PreparedStatement statement = connection.prepareStatement(FIND_BY_EMAIL_QUERY)) {
                 statement.setString(1, email);
@@ -76,33 +69,64 @@ public class UserRepository {
         
         return null;
     }
-    
-    private User getUserFromResultSet(ResultSet set) throws SQLException {
-        Long id = set.getLong("id");
-        String email = set.getString("email");
-        String password = set.getString("password");
-        String passwordSalt = set.getString("password_salt");
-        String name = set.getString("name");
-        Integer age = set.getInt("age");
 
-        return new User(id, email, password, passwordSalt, name, age);
-    }
-
-    public void insert(UserDto user, String password, String passwordSalt) throws SQLException {
+    public User findByName(String name) throws SQLException {
         try (Connection connection = DriverManager.getConnection(
-            JDBC_URL,
-            POSTGRES_USERNAME,
-            POSTGRES_PASSWORD
+            DatabaseConfig.JDBC_URL,
+            DatabaseConfig.POSTGRES_USERNAME,
+            DatabaseConfig.POSTGRES_PASSWORD
         )) {
-            try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY)) {
-                statement.setString(1, user.email());
-                statement.setString(2, password);
-                statement.setString(3, passwordSalt);
-                statement.setString(4, user.name());
-                statement.setInt(5, user.age());
-                
-                statement.executeUpdate();
+            try (PreparedStatement statement = connection.prepareStatement(FIND_BY_NAME_QUERY)) {
+                statement.setString(1, name);
+
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    return getUserFromResultSet(resultSet);
+                }
             }
         }
+
+        return null;
+    }
+    
+    private User getUserFromResultSet(ResultSet set) throws SQLException {
+        final var id = set.getLong("id");
+        final var email = set.getString("email");
+        final var password = set.getString("password");
+        final var name = set.getString("name");
+        final var age = set.getInt("age");
+
+        return new User(id, email, password, name, age);
+    }
+
+    public User insert(
+        String email,
+        String password,
+        String name,
+        int age
+    ) throws SQLException {
+        long id;
+
+        try (Connection connection = DriverManager.getConnection(
+            DatabaseConfig.JDBC_URL,
+            DatabaseConfig.POSTGRES_USERNAME,
+            DatabaseConfig.POSTGRES_PASSWORD
+        )) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, email);
+                statement.setString(2, password);
+                statement.setString(3, name);
+                statement.setInt(4, age);
+                
+                statement.executeUpdate();
+
+                final var resultSet = statement.getGeneratedKeys();
+                resultSet.next();
+
+                id = resultSet.getLong(1);
+            }
+        }
+
+        return new User(id, email, password, name, age);
     }
 }

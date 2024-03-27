@@ -19,6 +19,7 @@ ol {
 }
 
 body {
+    margin: 0;
     background-color: #f5f5f5;
 
     font-size: 1rem; /* 16px */
@@ -130,4 +131,8 @@ tbody > tr:nth-of-type(even) {
     padding: 10px;
 
     border-radius: 10px;
+}
+
+.users-table {
+    width: 100vw;
 }

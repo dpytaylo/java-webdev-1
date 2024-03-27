@@ -1,9 +1,9 @@
-package com.example.demo1.util;
+package com.example.demo1.util.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface GetMapping {
+public @interface MyController {
     String value();
 }

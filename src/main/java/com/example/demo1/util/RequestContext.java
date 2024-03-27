@@ -1,41 +1,43 @@
 package com.example.demo1.util;
 
+import com.example.demo1.util.exception.InvalidRequestUrlException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.regex.Pattern;
 
 @Data
 public class RequestContext {
+    private static final String URL_REGEX = "http://[^/]+(:\\d+)?/demo1_war_exploded(/[^?#]*)";
+    private static final Pattern PATTERN = Pattern.compile(URL_REGEX);
+
     private HttpServletRequest request;
     private HttpServletResponse response;
     private String url;
 
-    public RequestContext(String endpointUrl, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        URL requestFullUrl = new URL(request.getRequestURL().toString());
-        String requestUrl = requestFullUrl.getPath();
+    private WebContext webContext;
 
-        ArrayList<String> requestUrlArray = new ArrayList<>(Arrays.asList(requestUrl.split("/")));
-        requestUrlArray.removeIf(String::isEmpty);
-        requestUrlArray.remove(0); // Remove the first element with the name our application ('demo1_war_exploded/')
-
-        ArrayList<String> endpointUrlArray = new ArrayList<>(Arrays.asList(endpointUrl.split("/")));
-        endpointUrlArray.removeIf(String::isEmpty);
-
-        // Compares url heads
-        if (!requestUrlArray.subList(0, endpointUrlArray.size()).equals(endpointUrlArray)) {
-            throw new Exception("Invalid endpointUrl");
-        }
-
+    public RequestContext(JakartaServletWebApplication application, HttpServletRequest request, HttpServletResponse response) throws InvalidRequestUrlException {
         this.request = request;
         this.response = response;
-        this.url = String.join("/", requestUrlArray.subList(endpointUrlArray.size(), requestUrlArray.size()));
-    }
 
-    public boolean matchesApiUrl(String url) {
-        return this.url.matches(url);
+        final var matcher = PATTERN.matcher(request.getRequestURL().toString());
+
+        if (matcher.find()) {
+            this.url = matcher.group(2);
+
+            // Ensures that all URLs end with '/'
+            if (!this.url.endsWith("/")) {
+                this.url += "/";
+            }
+        } else {
+            throw new InvalidRequestUrlException();
+        }
+
+        final var exchange = application.buildExchange(request, response);
+        this.webContext = new WebContext(exchange, exchange.getLocale());
     }
 }

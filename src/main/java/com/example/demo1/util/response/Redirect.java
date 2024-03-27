@@ -23,16 +23,6 @@ public class Redirect implements IntoResponse {
         this.headers.putAll(headers);
     }
 
-//    public Redirect(String uri, HashMap<String, String> headers, StatusCode statusCode) {
-//        var headers2 = new HashMap<String, String>();
-//        headers2.put(ResponseHeaders.LOCATION, uri);
-//        headers2.putAll(headers);
-//
-//        this.uri = uri;
-//        this.headers = headers2;
-//        this.statusCode = statusCode;
-//    }
-
     @Override
     public StatusCode getStatusCode() {
         return StatusCode.SEE_OTHER;

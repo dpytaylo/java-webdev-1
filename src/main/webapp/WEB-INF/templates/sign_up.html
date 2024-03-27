@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Sign Up</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" th:href="@{/assets/index.css}">
+    </head>
+    <body>
+        <div class="middle-box">
+            <p class="text-xl">Sign In</p>
+            <div class="error-box" th:if="${error}" th:text="${error}"></div>
+            <form th:action="@{/sign_up}" method="post">
+                <label for="email">Email</label><br>
+                <input type="email" id="email" name="email" autocomplete="email" required><br>
+
+                <label for="password">Password</label><br>
+                <input type="password" id="password" name="password" autocomplete="current-password" required><br>
+
+                <label for="name">Name</label><br>
+                <input type="text" id="name" name="name" required><br>
+
+                <label for="age">Age</label><br>
+                <input type="number" id="age" name="age" required><br>
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </body>
+</html>
