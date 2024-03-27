@@ -5,15 +5,12 @@ import com.example.demo1.util.annotation.GetMapping;
 import com.example.demo1.util.annotation.ControllerMapping;
 import com.example.demo1.util.extractor.Json;
 import com.example.demo1.util.response.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @ControllerMapping("/api/users")
 public class JsonUserController extends Controller {
-    private static final Logger logger = LogManager.getLogger(JsonUserController.class);
     private final UserService userService;
 
-    public JsonUserController() throws Exception {
+    public JsonUserController() {
         userService = new UserService(new UserRepository());
     }
 

@@ -5,28 +5,23 @@ import com.example.demo1.util.annotation.AuthRequired;
 import com.example.demo1.util.annotation.GetMapping;
 import com.example.demo1.util.annotation.ControllerMapping;
 import com.example.demo1.util.response.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 
 @ControllerMapping("/users")
 public class UserController extends Controller {
-    private static final Logger logger = LogManager.getLogger(UserController.class);
-
     private final UserService userService;
 
     private static final Pattern PATTERN = Pattern.compile("/app/users/modify/(\\d+)/");
 
-    public UserController() throws Exception {
+    public UserController() {
         userService = new UserService(new UserRepository());
     }
 
     @GetMapping("/")
-    public IntoResponse get(RequestContext ctx) throws IOException {
+    public IntoResponse get(RequestContext ctx) {
         List<User> users;
 
         try {
