@@ -1,4 +1,4 @@
-package com.example.demo1.exception;
+package com.example.demo1.controller.exception;
 
 public class BadFormInputException extends Exception {
     public BadFormInputException(String msg) {

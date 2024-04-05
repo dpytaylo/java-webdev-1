@@ -1,16 +1,18 @@
-package com.example.demo1.user;
+package com.example.demo1.repository;
 
+import com.example.demo1.entity.User;
 import com.example.demo1.util.DatabaseConfig;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class UserRepository {
-    private static final String GET_ALL_QUERY = "SELECT id, email, password, name, age FROM users";
+    private static final String GET_ALL_QUERY = "SELECT id, email, password, name, age FROM users ORDER BY id";
     private static final String FIND_BY_USER_ID_QUERY = "SELECT id, email, password, name, age FROM users WHERE id = ?";
     private static final String FIND_BY_EMAIL_QUERY = "SELECT id, email, password, name, age FROM users WHERE email = ?";
     private static final String FIND_BY_NAME_QUERY = "SELECT id, email, password, name, age FROM users WHERE name = ?";
     private static final String INSERT_QUERY = "INSERT INTO users (email, password, name, age) VALUES (?, ?, ?, ?)";
+    private static final String MODIFY_QUERY = "UPDATE users SET name = ?, age = ? WHERE id = ?";
 
     public ArrayList<User> getAll() throws SQLException {
         ArrayList<User> users = new ArrayList<>();
@@ -128,5 +130,21 @@ public class UserRepository {
         }
 
         return new User(id, email, password, name, age);
+    }
+
+    public void modify(long userId, String name, int age) throws SQLException {
+        try (Connection connection = DriverManager.getConnection(
+            DatabaseConfig.JDBC_URL,
+            DatabaseConfig.POSTGRES_USERNAME,
+            DatabaseConfig.POSTGRES_PASSWORD
+        )) {
+            try (PreparedStatement statement = connection.prepareStatement(MODIFY_QUERY)) {
+                statement.setString(1, name);
+                statement.setInt(2, age);
+                statement.setLong(3, userId);
+
+                statement.executeUpdate();
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.demo1;
+package com.example.demo1.controller;
 
 import com.example.demo1.util.*;
 import com.example.demo1.util.annotation.AuthRequired;

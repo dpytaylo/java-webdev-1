@@ -6,6 +6,8 @@ import lombok.Getter;
 import java.util.HashMap;
 
 public class Redirect implements IntoResponse {
+    public static final Redirect USERS = new Redirect("/demo1_war_exploded/users");
+
     @Getter
     private final String uri;
     private final HashMap<String, String> headers;
@@ -16,11 +18,6 @@ public class Redirect implements IntoResponse {
 
         this.uri = uri;
         this.headers = headers;
-    }
-
-    public Redirect(String uri, HashMap<String, String> headers) {
-        this(uri);
-        this.headers.putAll(headers);
     }
 
     @Override

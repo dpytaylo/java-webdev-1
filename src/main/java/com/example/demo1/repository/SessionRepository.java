@@ -1,4 +1,4 @@
-package com.example.demo1.session;
+package com.example.demo1.repository;
 
 import com.example.demo1.util.DatabaseConfig;
 

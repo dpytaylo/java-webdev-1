@@ -1,10 +1,10 @@
-package com.example.demo1;
+package com.example.demo1.controller;
 
-import com.example.demo1.session.SessionRepository;
-import com.example.demo1.session.SessionService;
-import com.example.demo1.user.User;
-import com.example.demo1.user.UserRepository;
-import com.example.demo1.user.UserService;
+import com.example.demo1.repository.SessionRepository;
+import com.example.demo1.service.SessionService;
+import com.example.demo1.entity.User;
+import com.example.demo1.repository.UserRepository;
+import com.example.demo1.service.UserService;
 import com.example.demo1.util.*;
 import com.example.demo1.util.annotation.GetMapping;
 import com.example.demo1.util.annotation.ControllerMapping;
