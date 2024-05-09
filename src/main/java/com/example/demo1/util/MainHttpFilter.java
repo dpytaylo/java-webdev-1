@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @WebFilter("/*")
-public class MainServletFilter extends HttpFilter {
+public class MainHttpFilter extends HttpFilter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         final var req = (HttpServletRequest) request;
