@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public interface IntoResponse {
-    StatusCode getStatusCode();
+    StatusCode statusCode();
     HashMap<String, String> getHeaders();
     String getContentType();
     byte[] getContent();
