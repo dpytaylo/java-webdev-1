@@ -28,7 +28,7 @@ public class SignInController extends Controller {
     }
 
     @GetMapping("/")
-    public IntoResponse get(RequestContext ctx) {
+    public IntoResponse pageRoot(RequestContext ctx) {
         final var errorParam = ctx.getRequest().getParameter(VAR_ERROR);
         ctx.getWebContext().setVariable(VAR_ERROR, errorParam);
 
@@ -57,6 +57,7 @@ public class SignInController extends Controller {
         }
 
         sessionService.createSessionCookie(ctx, user.getId());
+
         return TemplateResponse.ROOT;
     }
 }

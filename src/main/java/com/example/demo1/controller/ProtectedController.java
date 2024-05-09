@@ -12,7 +12,7 @@ import com.example.demo1.util.response.Response;
 public class ProtectedController extends Controller {
     @GetMapping("/")
     @AuthRequired
-    public IntoResponse get(RequestContext ctx, long userId) {
+    public IntoResponse pageRoot(RequestContext ctx, long userId) {
         return new Response<>(StatusCode.OK, new Html("user id = " + userId));
     }
 }

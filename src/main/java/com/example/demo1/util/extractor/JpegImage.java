@@ -2,14 +2,14 @@ package com.example.demo1.util.extractor;
 
 import com.example.demo1.util.response.BodyResponse;
 
-public record Html(String inner) implements BodyResponse {
+public record JpegImage(byte[] content) implements BodyResponse {
     @Override
     public String contentType() {
-        return "text/html; charset=utf-8";
+        return "image/jpeg";
     }
 
     @Override
     public byte[] content() {
-        return inner.getBytes();
+        return content;
     }
 }

@@ -6,7 +6,11 @@ import lombok.Getter;
 import java.util.HashMap;
 
 public class Redirect implements IntoResponse {
-    public static final Redirect USERS = new Redirect("/demo1_war_exploded/users");
+    private static final String PREFIX = "/demo1_war_exploded";
+    public static final Redirect ROOT = new Redirect(PREFIX + "/");
+    public static final Redirect USERS = new Redirect(PREFIX + "/users");
+    public static final Redirect CONFIRM = new Redirect(PREFIX + "/sign_up/confirm");
+    public static final Redirect DEFAULT_AVATAR = new Redirect(PREFIX + "/assets/default_avatar.jpg");
 
     @Getter
     private final String uri;
@@ -21,7 +25,7 @@ public class Redirect implements IntoResponse {
     }
 
     @Override
-    public StatusCode getStatusCode() {
+    public StatusCode statusCode() {
         return StatusCode.SEE_OTHER;
     }
 

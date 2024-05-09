@@ -18,7 +18,7 @@ public class Response<T extends BodyResponse> implements IntoResponse {
     }
 
     @Override
-    public StatusCode getStatusCode() {
+    public StatusCode statusCode() {
         return statusCode;
     }
 
@@ -29,11 +29,11 @@ public class Response<T extends BodyResponse> implements IntoResponse {
 
     @Override
     public String getContentType() {
-        return body.getContentType();
+        return body.contentType();
     }
 
     @Override
     public byte[] getContent() {
-        return body.getContent();
+        return body.content();
     }
 }

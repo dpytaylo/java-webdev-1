@@ -1,8 +1,7 @@
 package com.example.demo1.repository;
 
-import com.example.demo1.util.DatabaseConfig;
+import com.example.demo1.pool.DatabasePool;
 
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -11,11 +10,7 @@ public class SessionRepository {
     private static final String INSERT_QUERY = "INSERT INTO sessions (session_id, user_id) VALUES (?, ?)";
 
     public Optional<Long> findBySessionId(String sessionId) throws SQLException {
-        try (final var connection = DriverManager.getConnection(
-            DatabaseConfig.JDBC_URL,
-            DatabaseConfig.POSTGRES_USERNAME,
-            DatabaseConfig.POSTGRES_PASSWORD
-        )) {
+        try (final var connection = DatabasePool.getConnection()) {
             try (final var statement = connection.prepareStatement(FIND_BY_SESSION_ID_QUERY)) {
                 statement.setString(1, sessionId);
 
@@ -31,11 +26,7 @@ public class SessionRepository {
     }
 
     public void insert(String sessionId, long userId) throws SQLException {
-        try (final var connection = DriverManager.getConnection(
-            DatabaseConfig.JDBC_URL,
-            DatabaseConfig.POSTGRES_USERNAME,
-            DatabaseConfig.POSTGRES_PASSWORD
-        )) {
+        try (final var connection = DatabasePool.getConnection()) {
             try (final var statement = connection.prepareStatement(INSERT_QUERY)) {
                 statement.setString(1, sessionId);
                 statement.setLong(2, userId);

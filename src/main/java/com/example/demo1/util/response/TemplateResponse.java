@@ -14,9 +14,10 @@ public record TemplateResponse(String name) implements IntoResponse {
     public static final TemplateResponse SIGN_UP = new TemplateResponse("sign_up");
     public static final TemplateResponse SIGN_IN = new TemplateResponse("sign_in");
     public static final TemplateResponse MODIFY = new TemplateResponse("users_modify");
+    public static final TemplateResponse CONFIRM = new TemplateResponse("confirm");
 
     @Override
-    public StatusCode getStatusCode() {
+    public StatusCode statusCode() {
         return null;
     }
 

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Sign In</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" th:href="@{/assets/index.css}">
+</head>
+<body>
+<div class="middle-box">
+    <p class="text-xl">Sign In</p>
+    <div class="error-box" th:if="${error}" th:text="${error}"></div>
+    <form th:action="@{/sign_up/confirm}" method="post">
+        <label for="token">Confirmation token</label><br>
+        <input type="text" id="token" name="token" required><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</div>
+</body>
+</html>

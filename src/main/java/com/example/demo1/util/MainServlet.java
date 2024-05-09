@@ -1,6 +1,7 @@
 package com.example.demo1.util;
 
-import com.example.demo1.controller.exception.UnauthorizedException;
+import com.example.demo1.service.exception.UnauthorizedException;
+import com.example.demo1.pool.DatabasePool;
 import com.example.demo1.repository.SessionRepository;
 import com.example.demo1.service.SessionService;
 import com.example.demo1.util.annotation.AuthRequired;
@@ -11,6 +12,7 @@ import com.example.demo1.util.exception.InvalidRequestUrlException;
 import com.example.demo1.util.exception.MainServletException;
 import com.example.demo1.util.response.*;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,12 +29,12 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
 @WebServlet(name = "mainServlet", value = "/app/*")
+@MultipartConfig
 public class MainServlet extends HttpServlet {
     private static final String ROOT_PATH = "/app";
 
@@ -63,13 +65,7 @@ public class MainServlet extends HttpServlet {
             controllers.add(new ControllerData(url, controller));
         }
 
-        try {
-            new DatabaseConfig();
-        } catch (SQLException e) {
-            logger.fatal("Failed to initialize database", e);
-            throw new RuntimeException(e);
-        }
-
+        DatabasePool.initializeDataSource();
         sessionService = new SessionService(new SessionRepository());
     }
 
@@ -120,10 +116,11 @@ public class MainServlet extends HttpServlet {
 
         try {
             ctx = new RequestContext(application, request, response);
-        } catch (InvalidRequestUrlException e) {
+        } catch (InvalidRequestUrlException | ServletException e) {
+            logger.error("doGet()", e);
             response.setStatus(StatusCode.INTERNAL_SERVER_ERROR.code());
             response.setContentType("text/html; charset=utf-8");
-            response.getOutputStream().write("doGet(): Invalid request url".getBytes());
+            response.getOutputStream().write("INTERNAL_SERVER_ERROR".getBytes());
             return;
         }
 
@@ -160,10 +157,11 @@ public class MainServlet extends HttpServlet {
 
         try {
             ctx = new RequestContext(application, request, response);
-        } catch (InvalidRequestUrlException e) {
+        } catch (InvalidRequestUrlException | ServletException e) {
+            logger.error("doPost()", e);
             response.setStatus(StatusCode.INTERNAL_SERVER_ERROR.code());
             response.setContentType("text/html; charset=utf-8");
-            response.getOutputStream().write("doPost(): Invalid request url".getBytes());
+            response.getOutputStream().write("INTERNAL_SERVER_ERROR".getBytes());
             return;
         }
 
@@ -228,7 +226,7 @@ public class MainServlet extends HttpServlet {
             return;
         }
 
-        response.setStatus(output.getStatusCode().code());
+        response.setStatus(output.statusCode().code());
 
         for (Map.Entry<String, String> entry : output.getHeaders().entrySet()) {
             response.setHeader(entry.getKey(), entry.getValue());

@@ -18,9 +18,9 @@ public class MainServletFilter extends HttpFilter {
         final var path = req.getRequestURI().substring(req.getContextPath().length());
 
         if (path.startsWith("/assets/") || path.startsWith("/WEB-INF/")) {
-            chain.doFilter(request, response); // Goes to default servlet.
+            chain.doFilter(req, response); // Goes to the default servlet
         } else {
-            request.getRequestDispatcher("/app" + path).forward(request, response);
+            req.getRequestDispatcher("/app" + path).forward(req, response);
         }
     }
 }

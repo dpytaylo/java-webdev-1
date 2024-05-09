@@ -1,6 +1,6 @@
 package com.example.demo1.service;
 
-import com.example.demo1.controller.exception.UnauthorizedException;
+import com.example.demo1.service.exception.UnauthorizedException;
 import com.example.demo1.repository.SessionRepository;
 import com.example.demo1.util.RequestContext;
 import jakarta.servlet.http.Cookie;

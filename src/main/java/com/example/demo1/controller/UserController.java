@@ -9,6 +9,7 @@ import com.example.demo1.util.annotation.AuthRequired;
 import com.example.demo1.util.annotation.GetMapping;
 import com.example.demo1.util.annotation.ControllerMapping;
 import com.example.demo1.util.annotation.PostMapping;
+import com.example.demo1.util.extractor.JpegImage;
 import com.example.demo1.util.response.*;
 
 import java.sql.SQLException;
@@ -19,14 +20,15 @@ import java.util.regex.Pattern;
 public class UserController extends Controller {
     private final UserService userService;
 
-    private static final Pattern PATTERN = Pattern.compile("/app/users/modify/(\\d+)/?");
+    private static final Pattern MODIFY_PATTERN = Pattern.compile("/app/users/(\\d+)/modify/?");
+    private static final Pattern AVATAR_PATTERN = Pattern.compile("/app/users/(\\d+)/avatar/?");
 
     public UserController() {
         userService = new UserService(new UserRepository());
     }
 
     @GetMapping("/")
-    public IntoResponse get(RequestContext ctx) {
+    public IntoResponse pageRoot(RequestContext ctx) {
         List<User> users;
 
         try {
@@ -39,10 +41,10 @@ public class UserController extends Controller {
         return TemplateResponse.USERS;
     }
 
-    @GetMapping("/modify/\\d+")
+    @GetMapping("/\\d+/modify/")
     @AuthRequired
-    public IntoResponse getModify(RequestContext ctx, long currentUserId) throws SQLException {
-        final var matcher = PATTERN.matcher(ctx.getUrl());
+    public IntoResponse pageModify(RequestContext ctx, long currentUserId) throws SQLException {
+        final var matcher = MODIFY_PATTERN.matcher(ctx.getUrl());
 
         long userId;
         if (matcher.find()) {
@@ -63,10 +65,10 @@ public class UserController extends Controller {
         return TemplateResponse.MODIFY;
     }
 
-    @PostMapping("/modify/\\d+")
+    @PostMapping("/\\d+/modify")
     @AuthRequired
     public IntoResponse modify(RequestContext ctx, long currentUserId) throws SQLException {
-        final var matcher = PATTERN.matcher(ctx.getUrl());
+        final var matcher = MODIFY_PATTERN.matcher(ctx.getUrl());
 
         long userId;
         if (matcher.find()) {
@@ -89,5 +91,44 @@ public class UserController extends Controller {
         }
 
         return Redirect.USERS;
+    }
+
+    @GetMapping("/\\d+/avatar")
+    public IntoResponse imageAvatar(RequestContext ctx) throws SQLException {
+        final var matcher = AVATAR_PATTERN.matcher(ctx.getUrl());
+
+        long userId;
+        if (matcher.find()) {
+            userId = Integer.parseInt(matcher.group(1));
+        } else {
+            throw new RuntimeException("Unreachable");
+        }
+
+        final var avatar = userService.getAvatarByUserId(userId);
+        if (avatar.isEmpty()) {
+            return Redirect.DEFAULT_AVATAR;
+        }
+
+        return new Response<>(new JpegImage(avatar.get()));
+    }
+
+    @PostMapping("/\\d+/avatar")
+    public IntoResponse modifyAvatar(RequestContext ctx) throws Exception {
+        final var matcher = AVATAR_PATTERN.matcher(ctx.getUrl());
+
+        long userId;
+        if (matcher.find()) {
+            userId = Integer.parseInt(matcher.group(1));
+        } else {
+            throw new RuntimeException("Unreachable");
+        }
+
+        System.out.println("type = " + ctx.getRequest().getContentType());
+
+        System.out.println("parts count = " + ctx.getParts().size());
+
+        final var file = ctx.getRequest().getPart("file");
+        userService.modifyAvatar(userId, file.getInputStream().readAllBytes());
+        return EmptyResponse.OK;
     }
 }

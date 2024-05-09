@@ -11,8 +11,10 @@
                 <col style="width: 10%;" />
                 <col style="width: 20%;" />
                 <col style="width: 20%;" />
-                <col style="width: 20%;" />
-                <col style="width: 20%;" />
+                <col style="width: 10%;" />
+                <col style="width: 10%;" />
+                <col style="width: 10%;" />
+                <col style="width: 10%;" />
                 <col style="width: 10%;" />
             </colgroup>
             <thead>
@@ -22,6 +24,8 @@
                     <th>Password</th>
                     <th>Name</th>
                     <th>Age</th>
+                    <th>Is confirmed</th>
+                    <th>Avatar</th>
                     <th></th>
                 </tr>
             </thead>
@@ -32,7 +36,9 @@
                     <td th:text="${#strings.abbreviate(user.password, 18)}"></td>
                     <td th:text="${user.name}"></td>
                     <td th:text="${user.age}"></td>
-                    <td><a th:href="@{'/users/modify/' + ${user.id}}">Modify</a></td>
+                    <td th:text="${user.isConfirmed}"></td>
+                    <td><img width="150" height="150" th:src="@{'/users/' + ${user.id} + '/avatar'}" alt="No image"></td>
+                    <td><a th:href="@{'/users/' + ${user.id} + '/modify'}">Modify</a></td>
                 </tr>
             </tbody>
         </table>

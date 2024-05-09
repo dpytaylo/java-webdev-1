@@ -22,12 +22,12 @@ public class Json<T> implements BodyResponse {
     }
 
     @Override
-    public String getContentType() {
+    public String contentType() {
         return "application/json";
     }
 
     @Override
-    public byte[] getContent() {
+    public byte[] content() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 

@@ -11,4 +11,5 @@ public class User {
     private String password;
     private String name;
     private int age;
+    private boolean isConfirmed;
 }
