@@ -19,7 +19,7 @@ public class JsonUserController extends Controller {
 
     @GetMapping("")
     public IntoResponse getAllUsers(RequestContext ctx) throws Exception {
-        return new Response<>(new Json<>(new Users(userService.getAll())));
+        return new Response<>(new Json<>(new Users(userService.getAll(null, null))));
     }
 }
 
