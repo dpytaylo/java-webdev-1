@@ -56,6 +56,6 @@ public class SignInController extends Controller {
         }
 
         sessionService.createSession(ctx, user.getId());
-        return TemplateResponse.ROOT;
+        return Redirect.ROOT;
     }
 }
