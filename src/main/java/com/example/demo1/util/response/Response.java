@@ -30,11 +30,11 @@ public class Response<T extends BodyResponse> implements IntoResponse {
 
     @Override
     public Optional<String> getContentType() {
-        return Optional.of(body.contentType());
+        return body.contentType();
     }
 
     @Override
     public Optional<byte[]> getContent() {
-        return Optional.of(body.content());
+        return body.content();
     }
 }

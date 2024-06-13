@@ -2,14 +2,16 @@ package com.example.demo1.util.extractor;
 
 import com.example.demo1.util.response.BodyResponse;
 
-public record JpegImage(byte[] content) implements BodyResponse {
+import java.util.Optional;
+
+public record JpegImage(byte[] inner) implements BodyResponse {
     @Override
-    public String contentType() {
-        return "image/jpeg";
+    public Optional<String> contentType() {
+        return Optional.of("image/jpeg");
     }
 
     @Override
-    public byte[] content() {
-        return content;
+    public Optional<byte[]> content() {
+        return Optional.of(inner);
     }
 }

@@ -9,6 +9,7 @@ import lombok.Data;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -22,12 +23,12 @@ public class Json<T> implements BodyResponse {
     }
 
     @Override
-    public String contentType() {
-        return "application/json";
+    public Optional<String> contentType() {
+        return Optional.of("application/json");
     }
 
     @Override
-    public byte[] content() {
+    public Optional<byte[]> content() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
@@ -38,6 +39,6 @@ public class Json<T> implements BodyResponse {
             throw new RuntimeException(e);
         }
 
-        return jsonValue;
+        return Optional.of(jsonValue);
     }
 }
