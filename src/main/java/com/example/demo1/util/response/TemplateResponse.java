@@ -27,13 +27,13 @@ public record TemplateResponse(String name) implements IntoResponse {
     }
 
     @Override
-    public String getContentType() {
-        return null;
+    public Optional<String> getContentType() {
+        return Optional.empty();
     }
 
     @Override
-    public byte[] getContent() {
-        return new byte[0];
+    public Optional<byte[]> getContent() {
+        return Optional.empty();
     }
 
     @Override

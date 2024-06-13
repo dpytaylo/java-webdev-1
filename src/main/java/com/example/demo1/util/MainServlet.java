@@ -1,8 +1,6 @@
 package com.example.demo1.util;
 
-import com.example.demo1.service.exception.UnauthorizedException;
 import com.example.demo1.pool.DatabasePool;
-import com.example.demo1.repository.SessionRepository;
 import com.example.demo1.service.SessionService;
 import com.example.demo1.util.annotation.AuthRequired;
 import com.example.demo1.util.annotation.GetMapping;
@@ -30,7 +28,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Optional;
 
 @WebServlet(name = "mainServlet", value = "/app/*")
@@ -40,7 +37,7 @@ public class MainServlet extends HttpServlet {
 
     private record ControllerData(String url, Controller controller) {}
 
-    private static final Logger logger = LogManager.getLogger(MainServlet.class);
+    private static final Logger logger = LogManager.getLogger();
     private final ArrayList<ControllerData> controllers = new ArrayList<>();
     private final SessionService sessionService;
 
@@ -66,7 +63,7 @@ public class MainServlet extends HttpServlet {
         }
 
         DatabasePool.initializeDataSource();
-        sessionService = new SessionService(new SessionRepository());
+        sessionService = new SessionService();
     }
 
     private static Controller getController(Class<? extends Controller> cls) throws MainServletException {
@@ -202,10 +199,12 @@ public class MainServlet extends HttpServlet {
         final var requestUrl = ctx.getUrl();
 
         if (requestUrl.matches(url) && authRequired != null) {
-            long userId;
-            try {
-                userId = sessionService.getSessionUserId(ctx);
-            } catch (UnauthorizedException e) {
+            final var optionalUserId = sessionService.getSessionUserId(ctx);
+
+            final long userId;
+            if (optionalUserId.isPresent()) {
+                userId = optionalUserId.get();
+            } else {
                 return Optional.of(TemplateResponse.SIGN_IN);
             }
 
@@ -228,12 +227,17 @@ public class MainServlet extends HttpServlet {
 
         response.setStatus(output.statusCode().code());
 
-        for (Map.Entry<String, String> entry : output.getHeaders().entrySet()) {
+        for (final var entry : output.getHeaders().entrySet()) {
             response.setHeader(entry.getKey(), entry.getValue());
         }
 
-        response.setContentType(output.getContentType());
-        response.getOutputStream().write(output.getContent());
+        final var contentType = output.getContentType();
+        contentType.ifPresent(response::setContentType);
+
+        final var content = output.getContent();
+        if (content.isPresent()) {
+            response.getOutputStream().write(content.get());
+        }
     }
 
     @Override

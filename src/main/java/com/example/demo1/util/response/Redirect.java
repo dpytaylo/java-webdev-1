@@ -4,12 +4,14 @@ import com.example.demo1.util.StatusCode;
 import lombok.Getter;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class Redirect implements IntoResponse {
     private static final String PREFIX = "/demo1_war_exploded";
-    public static final Redirect ROOT = new Redirect(PREFIX + "/");
-    public static final Redirect USERS = new Redirect(PREFIX + "/users");
-    public static final Redirect CONFIRM = new Redirect(PREFIX + "/sign_up/confirm");
+    public static final Redirect ROOT = new Redirect(PREFIX + "/app/");
+    public static final Redirect SIGN_IN = new Redirect(PREFIX + "/app/sign_in");
+    public static final Redirect USERS = new Redirect(PREFIX + "/app/users");
+    public static final Redirect CONFIRM = new Redirect(PREFIX + "/app/sign_up/confirm");
     public static final Redirect DEFAULT_AVATAR = new Redirect(PREFIX + "/assets/default_avatar.jpg");
 
     @Getter
@@ -35,12 +37,12 @@ public class Redirect implements IntoResponse {
     }
 
     @Override
-    public String getContentType() {
-        return "";
+    public Optional<String> getContentType() {
+        return Optional.empty();
     }
 
     @Override
-    public byte[] getContent() {
-        return new byte[0];
+    public Optional<byte[]> getContent() {
+        return Optional.empty();
     }
 }

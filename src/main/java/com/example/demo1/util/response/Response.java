@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -28,12 +29,12 @@ public class Response<T extends BodyResponse> implements IntoResponse {
     }
 
     @Override
-    public String getContentType() {
-        return body.contentType();
+    public Optional<String> getContentType() {
+        return Optional.of(body.contentType());
     }
 
     @Override
-    public byte[] getContent() {
-        return body.content();
+    public Optional<byte[]> getContent() {
+        return Optional.of(body.content());
     }
 }

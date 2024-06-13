@@ -24,7 +24,7 @@ public class UserService {
     public static final String EMAIL_SENDER_HOST = "smtp.gmail.com";
     public static final String EMAIL_SENDER_PORT = "587";
 
-    private static final Logger logger = LogManager.getLogger(UserService.class);
+    private static final Logger logger = LogManager.getLogger();
 
     private final UserRepository repository;
     private final ConfirmationTokenService confirmationTokenService;

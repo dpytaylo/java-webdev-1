@@ -7,13 +7,13 @@
     </head>
     <body>
         <div class="middle-box">
-            <p class="text-xl">Sign In</p>
+            <p th:text="#{sign_in.sign_in}" class="text-xl">Sign In</p>
             <div class="error-box" th:if="${error}" th:text="${error}"></div>
-            <form th:action="@{/sign_in}" method="post">
-                <label for="email">Email</label><br>
+            <form th:action="@{/app/sign_in}" method="post">
+                <label th:text="#{sign_in.email}" for="email">Email</label><br>
                 <input type="email" id="email" name="email" autocomplete="email" required><br>
 
-                <label for="password">Password</label><br>
+                <label th:text="#{sign_in.password}" for="password">Password</label><br>
                 <input type="password" id="password" name="password" autocomplete="current-password" required><br>
 
                 <input type="submit" value="Submit">

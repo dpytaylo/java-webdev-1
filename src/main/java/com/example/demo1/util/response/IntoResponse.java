@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IntoResponse {
     StatusCode statusCode();
     HashMap<String, String> getHeaders();
-    String getContentType();
-    byte[] getContent();
+    Optional<String> getContentType();
+    Optional<byte[]> getContent();
     default Optional<String> getTemplate() { return Optional.empty(); }
 }

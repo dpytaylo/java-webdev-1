@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 
 public class DatabasePool {
-    private static final Logger logger = LogManager.getLogger(DatabasePool.class);
+    private static final Logger logger = LogManager.getLogger();
     private static final String DRIVER_CLASS_NAME = "org.postgresql.Driver";
     public static final String URL = "jdbc:postgresql://localhost:5432/webdev";
     public static final String POSTGRES_USERNAME = "postgres";

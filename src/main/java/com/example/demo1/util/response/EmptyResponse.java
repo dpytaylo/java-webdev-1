@@ -3,6 +3,7 @@ package com.example.demo1.util.response;
 import com.example.demo1.util.StatusCode;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public record EmptyResponse(StatusCode statusCode) implements IntoResponse {
     public static EmptyResponse OK = new EmptyResponse(StatusCode.OK);
@@ -13,12 +14,12 @@ public record EmptyResponse(StatusCode statusCode) implements IntoResponse {
     }
 
     @Override
-    public String getContentType() {
-        return null;
+    public Optional<String> getContentType() {
+        return Optional.empty();
     }
 
     @Override
-    public byte[] getContent() {
-        return null;
+    public Optional<byte[]> getContent() {
+        return Optional.empty();
     }
 }

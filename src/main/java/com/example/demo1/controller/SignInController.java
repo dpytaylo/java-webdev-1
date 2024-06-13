@@ -1,6 +1,5 @@
 package com.example.demo1.controller;
 
-import com.example.demo1.repository.SessionRepository;
 import com.example.demo1.service.SessionService;
 import com.example.demo1.entity.User;
 import com.example.demo1.repository.UserRepository;
@@ -18,13 +17,13 @@ import java.sql.SQLException;
 @ControllerMapping("/sign_in")
 public class SignInController extends Controller {
     private static final String VAR_ERROR = "error";
-    private static final Logger logger = LogManager.getLogger(SignInController.class);
+    private static final Logger logger = LogManager.getLogger();
     private final UserService userService;
     private final SessionService sessionService;
 
     public SignInController() {
         userService = new UserService(new UserRepository());
-        sessionService = new SessionService(new SessionRepository());
+        sessionService = new SessionService();
     }
 
     @GetMapping("/")
@@ -36,7 +35,7 @@ public class SignInController extends Controller {
     }
 
     @PostMapping("/")
-    public IntoResponse signIn(RequestContext ctx) throws SQLException {
+    public IntoResponse signIn(RequestContext ctx) {
         final var request = ctx.getRequest();
 
         final var email = request.getParameter("email");
@@ -56,8 +55,7 @@ public class SignInController extends Controller {
             return TemplateResponse.INTERNAL_SERVER_ERROR;
         }
 
-        sessionService.createSessionCookie(ctx, user.getId());
-
+        sessionService.createSession(ctx, user.getId());
         return TemplateResponse.ROOT;
     }
 }

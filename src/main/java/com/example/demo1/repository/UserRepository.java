@@ -16,7 +16,7 @@ public class UserRepository {
     private static final String MODIFY_QUERY = "UPDATE users SET name = ?, age = ? WHERE id = ?";
     private static final String SET_CONFIRMED_EMAIL_QUERY = "UPDATE users SET is_confirmed = TRUE WHERE id = ?";
     private static final String GET_AVATAR_BY_USER_ID = "SELECT avatar FROM users WHERE id = ?";
-    private static final String MODIFY_AVATAR_BY_USER_ID = "UPDATE users SET avatar = ? FROM users WHERE id = ?";
+    private static final String MODIFY_AVATAR_BY_USER_ID = "UPDATE users SET avatar = ? WHERE id = ?";
 
     public ArrayList<User> getAll() throws SQLException {
         ArrayList<User> users = new ArrayList<>();

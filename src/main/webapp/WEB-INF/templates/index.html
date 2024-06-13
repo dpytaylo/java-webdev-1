@@ -8,28 +8,61 @@
     <body>
         <main>
             <div class="element">
+                <p th:text="#{index.change_language}">Change language</p>
+                <button id="lang_en">English</button>
+                <button id="lang_ru">Russian</button>
+            </div>
+
+            <div th:text="#{index.home}" class="element">Welcome!</div>
+
+            <div class="element">
                 <menu>
-                    <li><a th:href="@{/sign_in}">Sign In</a></li>
-                    <li><a th:href="@{/sign_up}">Sign Up</a></li>
-                    <li><a th:href="@{/sign_up/confirm}">Confirm account</a></li>
+                    <li><a th:text="#{index.sign_in}" th:href="@{/app/sign_in}">Sign In</a></li>
+                    <li><a th:text="#{index.sign_up}" th:href="@{/app/sign_up}">Sign Up</a></li>
+                    <li><a th:text="#{index.confirm}" th:href="@{/app/sign_up/confirm}">Confirm account</a></li>
                 </menu>
             </div>
 
             <div class="element">
-                <a th:href="@{/protected}">Protected test</a>
+                <a th:text="#{index.protected_test}" th:href="@{/app/protected}">Protected test</a>
             </div>
 
             <div class="element">
-                <a th:href="@{/users}">Users</a>
+                <a th:text="#{index.users}" th:href="@{/app/users}">Users</a>
             </div>
 
             <div class="element">
-                <p>Other pages:</p>
+                <p th:text="#{index.other_pages}">Other pages:</p>
                 <ol>
-                    <li><a th:href="@{/errors/not_found}">404 HTTP Error - Not Found</a></li>
-                    <li><a th:href="@{/errors/internal_server_error}">500 HTTP Error - Internal Server Error</a></li>
+                    <li><a th:href="@{/app/errors/not_found}">404 HTTP Error - Not Found</a></li>
+                    <li><a th:href="@{/app/errors/internal_server_error}">500 HTTP Error - Internal Server Error</a></li>
                 </ol>
             </div>
         </main>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', (_) => {
+                const en = document.getElementById('lang_en');
+                const ru = document.getElementById('lang_ru');
+
+                en.addEventListener('click', () => {
+                    sendRequest('en');
+                });
+
+                ru.addEventListener('click', () => {
+                    sendRequest('ru');
+                });
+            });
+
+            function sendRequest(lang) {
+                fetch(`/demo1_war_exploded/app/language/${lang}`, {
+                    method: 'POST',
+                })
+                    .then(_ => location.reload())
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+        </script>
     </body>
 </html>

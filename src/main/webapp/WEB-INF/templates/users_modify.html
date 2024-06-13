@@ -7,31 +7,31 @@
     </head>
     <body>
         <div class="mt-24 mb-2 box">
-            <p class="text-xl">Modify the user</p>
+            <p th:text="#{users_modify.title}" class="text-xl">Modify the user</p>
             <div class="error-box" th:if="${error}" th:text="${error}"></div>
-            <form th:action="@{'/users/' + ${id} + '/modify'}" method="post">
-                <label for="email">Email</label><br>
+            <form th:action="@{'/app/users/' + ${id} + '/modify'}" method="post">
+                <label th:text="#{users_modify.email}" for="email">Email</label><br>
                 <input type="email" id="email" readonly th:attr="value=${email}"><br>
 
-                <label for="password">Password</label><br>
+                <label th:text="#{users_modify.password}" for="password">Password</label><br>
                 <input type="password" id="password" readonly th:attr="value=${password}"><br>
 
-                <label for="name">Name</label><br>
+                <label th:text="#{users_modify.name}" for="name">Name</label><br>
                 <input type="text" id="name" name="name" required th:attr="value=${name}"><br>
 
-                <label for="age">Age</label><br>
+                <label th:text="#{users_modify.age}" for="age">Age</label><br>
                 <input type="number" id="age" name="age" required th:attr="value=${age}"><br>
 
                 <input type="submit" value="Submit">
             </form>
         </div>
         <div class="box">
-            <p class="text-xl">Avatar</p>
-            <img width="150" height="150" th:src="@{'/users/' + ${id} + '/avatar'}" alt="No image"><br>
-            <form th:action="@{'/users/' + ${id} + '/avatar'}" method="post" enctype="multipart/form-data">
-                <label for="file">Choose file</label><br>
+            <p th:text="#{users_modify.avatar}" class="text-xl">Avatar</p>
+            <img width="150" height="150" th:src="@{'/app/users/' + ${id} + '/avatar'}" alt="No image"><br>
+            <form th:action="@{'/app/users/' + ${id} + '/avatar'}" method="post" enctype="multipart/form-data">
+                <label th:text="#{users_modify.choose_file}" for="file">Choose File</label><br>
                 <input type="file" id="file" name="file" accept="image/jpeg"><br>
-                <input type="submit" value="Submit">
+                <input type="submit" value="Upload file">
             </form>
         </div>
     </body>

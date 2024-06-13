@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 public class Controller {
-    private static final Logger logger = LogManager.getLogger(Controller.class);
+    private static final Logger logger = LogManager.getLogger();
 
     private List<Method> getMethods;
     private List<Method> postMethods;

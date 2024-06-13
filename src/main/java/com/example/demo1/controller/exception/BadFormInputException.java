@@ -4,11 +4,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class BadFormInputException extends Exception {
-    public BadFormInputException(String msg) {
-        super(msg);
+    public BadFormInputException(String cause) {
+        super(cause);
     }
 
-    public BadFormInputException(Exception e) {
-        super(e);
+    public BadFormInputException(Throwable throwable) {
+        super(throwable);
     }
 }

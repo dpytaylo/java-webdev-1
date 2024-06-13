@@ -158,5 +158,6 @@ tbody > tr:nth-of-type(even) {
 }
 
 .users-table {
+    background-color: white;
     width: 100vw;
 }

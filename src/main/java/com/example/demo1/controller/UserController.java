@@ -1,6 +1,7 @@
 package com.example.demo1.controller;
 
 import com.example.demo1.controller.exception.BadFormInputException;
+import com.example.demo1.controller.exception.BadInputParameterException;
 import com.example.demo1.entity.User;
 import com.example.demo1.repository.UserRepository;
 import com.example.demo1.service.UserService;
@@ -41,7 +42,7 @@ public class UserController extends Controller {
         return TemplateResponse.USERS;
     }
 
-    @GetMapping("/\\d+/modify/")
+    @GetMapping("/\\d+/modify")
     @AuthRequired
     public IntoResponse pageModify(RequestContext ctx, long currentUserId) throws SQLException {
         final var matcher = MODIFY_PATTERN.matcher(ctx.getUrl());
@@ -67,14 +68,14 @@ public class UserController extends Controller {
 
     @PostMapping("/\\d+/modify")
     @AuthRequired
-    public IntoResponse modify(RequestContext ctx, long currentUserId) throws SQLException {
+    public IntoResponse modify(RequestContext ctx, long currentUserId) throws BadInputParameterException, SQLException {
         final var matcher = MODIFY_PATTERN.matcher(ctx.getUrl());
 
         long userId;
         if (matcher.find()) {
             userId = Integer.parseInt(matcher.group(1));
         } else {
-            throw new RuntimeException("Unreachable");
+            throw new BadInputParameterException("expected valid user id");
         }
 
         final var request = ctx.getRequest();
@@ -94,14 +95,14 @@ public class UserController extends Controller {
     }
 
     @GetMapping("/\\d+/avatar")
-    public IntoResponse imageAvatar(RequestContext ctx) throws SQLException {
+    public IntoResponse imageAvatar(RequestContext ctx) throws BadInputParameterException, SQLException {
         final var matcher = AVATAR_PATTERN.matcher(ctx.getUrl());
 
         long userId;
         if (matcher.find()) {
             userId = Integer.parseInt(matcher.group(1));
         } else {
-            throw new RuntimeException("Unreachable");
+            throw new BadInputParameterException("expected valid user id");
         }
 
         final var avatar = userService.getAvatarByUserId(userId);
@@ -120,15 +121,11 @@ public class UserController extends Controller {
         if (matcher.find()) {
             userId = Integer.parseInt(matcher.group(1));
         } else {
-            throw new RuntimeException("Unreachable");
+            throw new BadInputParameterException("expected valid user id");
         }
-
-        System.out.println("type = " + ctx.getRequest().getContentType());
-
-        System.out.println("parts count = " + ctx.getParts().size());
 
         final var file = ctx.getRequest().getPart("file");
         userService.modifyAvatar(userId, file.getInputStream().readAllBytes());
-        return EmptyResponse.OK;
+        return Redirect.USERS;
     }
 }
