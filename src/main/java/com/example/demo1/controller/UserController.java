@@ -30,10 +30,12 @@ public class UserController extends Controller {
 
     @GetMapping("/")
     public IntoResponse pageRoot(RequestContext ctx) {
-        List<User> users;
+        final var pageNum = ctx.getRequest().getParameter("pageNum");
+        final var pageSize= ctx.getRequest().getParameter("pageSize");
 
+        List<User> users;
         try {
-            users = userService.getAll();
+            users = userService.getAll(pageNum, pageSize);
         } catch (SQLException e) {
             return TemplateResponse.INTERNAL_SERVER_ERROR;
         }

@@ -41,8 +41,12 @@ public class UserService {
         return repository.findByUserId(userId);
     }
 
-    public ArrayList<User> getAll() throws SQLException {
-        return repository.getAll();
+    public ArrayList<User> getAll(String pageNum, String pageSize) throws SQLException {
+        if (pageNum == null || pageSize == null) {
+            return repository.getAll();
+        }
+
+        return repository.getAll(Integer.parseInt(pageNum), Integer.parseInt(pageSize));
     }
 
     public Optional<User> signIn(String email, String password) throws SQLException {

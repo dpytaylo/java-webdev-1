@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public class UserRepository {
     private static final String GET_ALL_QUERY = "SELECT id, email, password, name, age, is_confirmed FROM users ORDER BY id";
+    private static final String GET_ALL_QUERY_PAGINATED = "SELECT id, email, password, name, age, is_confirmed FROM users ORDER BY id LIMIT ? OFFSET ?";
     private static final String FIND_BY_USER_ID_QUERY = "SELECT id, email, password, name, age, is_confirmed FROM users WHERE id = ?";
     private static final String FIND_BY_EMAIL_QUERY = "SELECT id, email, password, name, age, is_confirmed FROM users WHERE email = ?";
     private static final String FIND_BY_NAME_QUERY = "SELECT id, email, password, name, age, is_confirmed FROM users WHERE name = ?";
@@ -24,6 +25,27 @@ public class UserRepository {
         try (final var connection = DatabasePool.getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 ResultSet resultSet = statement.executeQuery(GET_ALL_QUERY);
+
+                while (resultSet.next()) {
+                    users.add(getUserFromResultSet(resultSet));
+                }
+            }
+        }
+
+        return users;
+    }
+
+    public ArrayList<User> getAll(int pageNum, int pageSize) throws SQLException {
+        ArrayList<User> users = new ArrayList<>();
+
+        int offset = (pageNum - 1) * pageSize;
+
+        try (final var connection = DatabasePool.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_QUERY_PAGINATED)) {
+                preparedStatement.setInt(1, pageSize);
+                preparedStatement.setInt(2, offset);
+
+                ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
                     users.add(getUserFromResultSet(resultSet));
